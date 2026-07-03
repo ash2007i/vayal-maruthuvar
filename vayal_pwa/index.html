@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>வயல் மருத்துவர் | Tamil Nadu Crop Doctor</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a5c1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="வயல் மருத்துவர்">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:linear-gradient(160deg,#0d3d0d,#1a6b1a);min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:20px 12px;font-family:'Segoe UI',Tahoma,Arial,sans-serif}
+.phone{width:100%;max-width:420px;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.header{background:linear-gradient(160deg,#0d3d0d 0%,#237a23 100%);padding:26px 20px 18px;text-align:center;color:white}
+.hicon{font-size:40px;margin-bottom:5px}
+.hta{font-size:25px;font-weight:800}
+.hen{font-size:11px;letter-spacing:2px;opacity:.7;margin-top:2px;text-transform:uppercase}
+.hbadge{display:inline-block;margin-top:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);font-size:10px;padding:4px 14px;border-radius:20px}
+.content{padding:16px 14px 22px}
+.upload-zone{border:2px dashed #2d8a2d;border-radius:16px;background:#f3fbf3;cursor:pointer;overflow:hidden;margin-bottom:12px;transition:all .2s}
+.upload-zone:hover{background:#e8f7e8}
+.upload-ph{padding:28px 20px;text-align:center}
+.ucam{font-size:48px;margin-bottom:8px}
+.uta{font-size:16px;font-weight:700;color:#1a5c1a;margin-bottom:3px}
+.uen{font-size:12px;color:#888}
+.prev-wrap{display:none;position:relative}
+#prev-img{width:100%;max-height:220px;object-fit:cover;display:block}
+.prev-lbl{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px}
+#file-input{display:none}
+.btn-main{display:none;width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#1a5c1a,#2d8a2d);color:white;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;transition:all .2s}
+.btn-main:hover:not(:disabled){box-shadow:0 6px 20px rgba(30,100,30,.4);transform:translateY(-1px)}
+.btn-main:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-sec{width:100%;padding:11px;border:1.5px solid #ddd;border-radius:12px;background:#f8f8f8;color:#555;font-size:14px;cursor:pointer;transition:background .15s}
+.btn-sec:hover{background:#eee}
+.loading{display:none;text-align:center;padding:24px 0}
+.spinner{width:44px;height:44px;border:4px solid #ddf0dd;border-top:4px solid #2d8a2d;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 11px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lta{font-size:15px;font-weight:700;color:#1a5c1a}
+.len{font-size:11px;color:#999;margin-top:3px}
+.confirm-box{display:none;border:1.5px solid #43a047;border-radius:14px;background:#e8f5e9;padding:14px;margin-bottom:12px}
+.confirm-q{font-size:14px;font-weight:600;color:#1a5c1a;margin-bottom:10px;line-height:1.4}
+.confirm-btns{display:flex;gap:8px;margin-bottom:10px}
+.btn-yes{flex:1;padding:10px;border:none;border-radius:10px;background:#1a5c1a;color:white;font-size:14px;font-weight:600;cursor:pointer}
+.btn-no{flex:1;padding:10px;border:1.5px solid #aaa;border-radius:10px;background:white;color:#555;font-size:14px;cursor:pointer}
+.crop-select{display:none;width:100%;padding:10px;border:1.5px solid #43a047;border-radius:10px;font-size:14px;background:white;color:#333;margin-bottom:8px}
+.btn-confirm-crop{display:none;width:100%;padding:11px;border:none;border-radius:10px;background:#1a5c1a;color:white;font-size:14px;font-weight:600;cursor:pointer}
+.lang-toggle{display:flex;background:#f0f0f0;border-radius:22px;padding:3px;margin-bottom:12px;gap:0}
+.lang-btn{flex:1;padding:8px;border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#666;transition:all .2s}
+.lang-btn.active{background:#1a5c1a;color:white}
+.results{display:none}
+.res-card{border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.res-lbl{font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;margin-bottom:6px;opacity:.75}
+.card-dis{background:linear-gradient(135deg,#b71c1c,#e53935);color:white}
+.card-dis .res-lbl{color:rgba(255,255,255,.8)}
+.dis-ta{font-size:20px;font-weight:800;color:white;line-height:1.3}
+.dis-en{font-size:13px;color:rgba(255,255,255,.8);margin-top:2px}
+.card-healthy{background:#e8f5e9;border:1.5px solid #43a047}
+.card-mild{background:#fffde7;border:1.5px solid #fdd835}
+.card-moderate{background:#fff3e0;border:1.5px solid #fb8c00}
+.card-severe{background:#fce4ec;border:1.5px solid #e91e63}
+.sev-val{font-size:18px;font-weight:800;color:#333;margin-bottom:4px}
+.sev-sym{font-size:13px;color:#555;line-height:1.6}
+.card-ai{background:#f3e5f5;border:1.5px solid #ab47bc}
+.card-ai .res-lbl{color:#6a1b9a}
+.card-treat{background:#e8f5e9;border:1.5px solid #43a047}
+.card-treat .res-lbl{color:#2e7d32}
+.card-chem{background:#e8eaf6;border:1.5px solid #5c6bc0}
+.card-chem .res-lbl{color:#283593}
+.card-avoid{background:#fff8e1;border:1.5px solid #ffb300}
+.card-avoid .res-lbl{color:#e65100}
+.card-cost{background:#e0f7fa;border:1.5px solid #00acc1}
+.card-cost .res-lbl{color:#006064}
+.card-adv{background:#e3f2fd;border:1.5px solid #1e88e5}
+.card-adv .res-lbl{color:#1565c0}
+.res-txt{font-size:13px;color:#333;line-height:1.75}
+.footer{background:#f7f7f7;border-top:1px solid #eee;padding:10px;text-align:center;font-size:10px;color:#bbb}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="header">
+  <div class="hicon">🌾</div>
+  <div class="hta">வயல் மருத்துவர்</div>
+  <div class="hen">Vayal Maruthavar · AI Crop Doctor</div>
+  <div class="hbadge">🌾 Tamil Nadu Crop Disease AI · AI for India</div>
+</div>
+<div class="content">
+  <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+    <div class="upload-ph" id="upload-ph">
+      <div class="ucam">📸</div>
+      <div class="uta">படம் எடுங்கள்</div>
+      <div class="uen">Tap to photograph your crop leaf</div>
+    </div>
+    <div class="prev-wrap" id="prev-wrap">
+      <img id="prev-img" src="" alt="">
+      <span class="prev-lbl">✓ Photo ready</span>
+    </div>
+  </div>
+  <input type="file" id="file-input" accept="image/*" onchange="onFile(event)">
+  <div class="confirm-box" id="confirm-box">
+    <div class="confirm-q" id="confirm-q"></div>
+    <div class="confirm-btns">
+      <button class="btn-yes" onclick="confirmCrop()">✓ Yes, correct</button>
+      <button class="btn-no" onclick="showCropSelect()">✗ No, change it</button>
+    </div>
+    <select class="crop-select" id="crop-select" onchange="onCropSelect()">
+      <option value="">-- Select your crop --</option>
+      <option value="Rice (நெல்)">Rice / நெல்</option>
+      <option value="Turmeric (மஞ்சள்)">Turmeric / மஞ்சள்</option>
+      <option value="Banana (வாழை)">Banana / வாழை</option>
+      <option value="Sugarcane (கரும்பு)">Sugarcane / கரும்பு</option>
+      <option value="Cotton (பருத்தி)">Cotton / பருத்தி</option>
+      <option value="Groundnut (நிலக்கடலை)">Groundnut / நிலக்கடலை</option>
+      <option value="Tomato (தக்காளி)">Tomato / தக்காளி</option>
+      <option value="Brinjal (கத்திரிக்காய்)">Brinjal / கத்திரிக்காய்</option>
+      <option value="Chilli (மிளகாய்)">Chilli / மிளகாய்</option>
+      <option value="Coconut (தென்னை)">Coconut / தென்னை</option>
+      <option value="Mango (மா)">Mango / மா</option>
+      <option value="Onion (வெங்காயம்)">Onion / வெங்காயம்</option>
+    </select>
+    <button class="btn-confirm-crop" id="btn-confirm-crop" onclick="confirmManualCrop()">✓ Confirm & Analyse Disease</button>
+  </div>
+  <button class="btn-main" id="btn-analyse" onclick="detectCrop()">🔍 AI பகுப்பாய்வு · Analyse My Crop</button>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="lta" id="lta">பயிரை கண்டறிகிறது...</div>
+    <div class="len" id="len">Detecting crop type...</div>
+  </div>
+  <div class="lang-toggle" id="lang-toggle" style="display:none">
+    <button class="lang-btn active" id="btn-ta" onclick="setLang('ta')">🇮🇳 தமிழ்</button>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 English</button>
+  </div>
+  <div class="results" id="results"></div>
+</div>
+<div class="footer">வயல் மருத்துவர் · Tamil Nadu Crop Doctor · AI for India</div>
+</div>
+
+<script>
+const KEY='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';
+const EP='https://api.groq.com/openai/v1/chat/completions';
+const MDL='qwen/qwen3.6-27b';
+let b64=null,mime=null,detectedCrop='',confirmedCrop='',resultData={},lang='ta';
+
+function onFile(e){
+  const f=e.target.files[0]; if(!f)return;
+  const img=new Image(),url=URL.createObjectURL(f);
+  img.onload=()=>{
+    const c=document.createElement('canvas');
+    const M=800;let w=img.width,h=img.height;
+    if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}
+    c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+    const d=c.toDataURL('image/jpeg',0.7);
+    b64=d.split(',')[1];mime='image/jpeg';URL.revokeObjectURL(url);
+    document.getElementById('prev-img').src=d;
+    show('prev-wrap');hide('upload-ph');
+    document.getElementById('btn-analyse').style.display='block';
+    hide('results');hide('lang-toggle');hide('confirm-box');
+    document.getElementById('results').innerHTML='';
+  };img.src=url;
+}
+
+async function detectCrop(){
+  document.getElementById('btn-analyse').style.display='none';
+  setLoad(true,'பயிரை கண்டறிகிறது...','Identifying crop type...');
+  const p=`Look at this leaf image. What crop is this? Be concise.
+Reply ONLY in this format:
+CROP_ENGLISH: [one word crop name]
+CROP_TAMIL: [Tamil name]
+CONFIDENCE: [High or Medium or Low]`;
+  try{
+    const txt=await api(p);
+    const cEn=get(txt,'CROP_ENGLISH')||'Unknown crop';
+    const cTa=get(txt,'CROP_TAMIL')||'';
+    const conf=get(txt,'CONFIDENCE')||'';
+    detectedCrop=cEn;
+    setLoad(false);
+    const q=`🌿 Is this a ${cEn} ${cTa?'/ '+cTa:''} leaf?${conf==='Low'?' (AI is not fully sure)':''}`;
+    document.getElementById('confirm-q').textContent=q;
+    show('confirm-box');
+  }catch(err){setLoad(false);showErr(err.message);}
+}
+
+function confirmCrop(){
+  confirmedCrop=detectedCrop;
+  hide('confirm-box');
+  diagnose();
+}
+
+function showCropSelect(){
+  document.getElementById('crop-select').style.display='block';
+}
+
+function onCropSelect(){
+  const v=document.getElementById('crop-select').value;
+  if(v) document.getElementById('btn-confirm-crop').style.display='block';
+}
+
+function confirmManualCrop(){
+  const v=document.getElementById('crop-select').value;
+  if(!v){alert('Please select your crop');return;}
+  confirmedCrop=v;
+  hide('confirm-box');
+  diagnose();
+}
+
+async function diagnose(){
+  setLoad(true,'நோயை கண்டறிகிறது...','Diagnosing '+confirmedCrop+'...');
+  const p=`This is a ${confirmedCrop} crop leaf. Identify the disease from this image.
+Be CONCISE — maximum 1-2 sentences per field. No long paragraphs.
+
+Reply ONLY in this exact format, all fields required:
+
+DISEASE_TAMIL: [disease name in Tamil]
+DISEASE_ENGLISH: [disease name in English]
+SEVERITY: [Healthy or Mild or Moderate or Severe]
+SYMPTOMS_TAMIL: [1 concise sentence in Tamil about visible symptoms]
+SYMPTOMS_ENGLISH: [1 concise sentence in English about visible symptoms]
+AI_ANALYSIS_TAMIL: [1 sentence in Tamil: what visual clues you saw]
+AI_ANALYSIS_ENGLISH: [1 sentence in English: what visual clues you saw]
+TREATMENT_TAMIL: [3 numbered steps in Tamil only, each on new line]
+TREATMENT_ENGLISH: [3 numbered steps in English only, each on new line]
+CHEMICALS_TAMIL: [2 chemicals with dosage in Tamil]
+CHEMICALS_ENGLISH: [2 chemicals with dosage in English]
+AVOID_TAMIL: [2 things NOT to do in Tamil]
+AVOID_ENGLISH: [2 things NOT to do in English]
+COST_ESTIMATE: [₹ total range]
+ADVICE_TAMIL: [1 final short tip in Tamil]
+ADVICE_ENGLISH: [1 final short tip in English]`;
+  try{
+    const txt=await api(p);
+    console.log('AI:',txt);
+    parseShow(txt);
+  }catch(err){setLoad(false);showErr(err.message);}
+}
+
+async function api(prompt){
+  const r=await fetch(EP,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+KEY},
+    body:JSON.stringify({
+      model:MDL,
+      messages:[{role:'user',content:[
+        {type:'image_url',image_url:{url:'data:'+mime+';base64,'+b64}},
+        {type:'text',text:prompt}
+      ]}],
+      temperature:0.1,max_tokens:900
+    })
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
+  let txt=d.choices[0].message.content;
+  // strip thinking traces from qwen
+  txt=txt.replace(/<think>[\s\S]*?<\/think>/gi,'').trim();
+  return txt;
+}
+
+function get(txt,k){
+  const m=txt.match(new RegExp(k+':\\s*([\\s\\S]+?)(?=\\n[A-Z_]+:|$)'));
+  return m?m[1].trim():'';
+}
+
+function parseShow(txt){
+  setLoad(false);
+  resultData={
+    dta:get(txt,'DISEASE_TAMIL'),den:get(txt,'DISEASE_ENGLISH'),
+    sev:get(txt,'SEVERITY'),
+    symTa:get(txt,'SYMPTOMS_TAMIL'),symEn:get(txt,'SYMPTOMS_ENGLISH'),
+    aiTa:get(txt,'AI_ANALYSIS_TAMIL'),aiEn:get(txt,'AI_ANALYSIS_ENGLISH'),
+    trTa:get(txt,'TREATMENT_TAMIL'),trEn:get(txt,'TREATMENT_ENGLISH'),
+    chTa:get(txt,'CHEMICALS_TAMIL'),chEn:get(txt,'CHEMICALS_ENGLISH'),
+    avTa:get(txt,'AVOID_TAMIL'),avEn:get(txt,'AVOID_ENGLISH'),
+    cost:get(txt,'COST_ESTIMATE'),
+    adTa:get(txt,'ADVICE_TAMIL'),adEn:get(txt,'ADVICE_ENGLISH'),raw:txt
+  };
+  if(!resultData.dta&&!resultData.den){
+    document.getElementById('results').innerHTML=
+      `<div class="res-card card-ai"><div class="res-lbl">🌾 வயல் மருத்துவர் பதில்</div><div class="res-txt" style="white-space:pre-wrap">${txt}</div></div>
+       <button class="btn-sec" style="margin-top:8px" onclick="resetApp()">🔄 Scan Another</button>`;
+    show('results');return;
+  }
+  show('lang-toggle');
+  render(lang);
+}
+
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-ta').classList.toggle('active',l==='ta');
+  document.getElementById('btn-en').classList.toggle('active',l==='en');
+  render(l);
+}
+
+function sCard(s){
+  const sl=(s||'').toLowerCase();
+  return sl==='healthy'?'card-healthy':sl==='mild'?'card-mild':sl==='severe'?'card-severe':'card-moderate';
+}
+function sIcon(s){
+  const sl=(s||'').toLowerCase();
+  return sl==='healthy'?'🟢':sl==='mild'?'🟡':sl==='severe'?'🔴':'🟠';
+}
+
+function render(l){
+  const r=resultData,ta=l==='ta';
+  document.getElementById('results').innerHTML=`
+    <div class="res-card card-dis">
+      <div class="res-lbl">🌾 வயல் மருத்துவர் பதில் · VAYAL MARUTHAVAR RESPONSE</div>
+      <div class="dis-ta">${r.dta||'தெரியவில்லை'}</div>
+      <div class="dis-en">${r.den||'Unknown'}</div>
+    </div>
+    <div class="res-card ${sCard(r.sev)}">
+      <div class="res-lbl">${sIcon(r.sev)} ${ta?'தீவிரம்':'SEVERITY'}</div>
+      <div class="sev-val">${r.sev||'—'}</div>
+      <div class="sev-sym">${ta?r.symTa:r.symEn}</div>
+    </div>
+    <div class="res-card card-ai">
+      <div class="res-lbl">🤖 ${ta?'AI எப்படி கண்டுபிடித்தது':'HOW AI IDENTIFIED IT'}</div>
+      <div class="res-txt">${ta?r.aiTa:r.aiEn}</div>
+    </div>
+    <div class="res-card card-treat">
+      <div class="res-lbl">✅ ${ta?'சிகிச்சை முறை':'TREATMENT STEPS'}</div>
+      <div class="res-txt">${(ta?r.trTa:r.trEn).replace(/\n/g,'<br>')}</div>
+    </div>
+    <div class="res-card card-chem">
+      <div class="res-lbl">🧪 ${ta?'வாங்க வேண்டிய மருந்து':'CHEMICALS TO BUY'}</div>
+      <div class="res-txt">${(ta?r.chTa:r.chEn).replace(/\n/g,'<br>')}</div>
+    </div>
+    <div class="res-card card-avoid">
+      <div class="res-lbl">⛔ ${ta?'இதை செய்யாதீர்கள்':'DO NOT DO THIS'}</div>
+      <div class="res-txt">${(ta?r.avTa:r.avEn).replace(/\n/g,'<br>')}</div>
+    </div>
+    <div class="res-card card-cost">
+      <div class="res-lbl">💰 ${ta?'செலவு மதிப்பீடு':'ESTIMATED COST'}</div>
+      <div class="res-txt" style="font-size:17px;font-weight:700">${r.cost||'—'}</div>
+    </div>
+    <div class="res-card card-adv">
+      <div class="res-lbl">💡 ${ta?'கூடுதல் ஆலோசனை':'EXTRA ADVICE'}</div>
+      <div class="res-txt">${ta?r.adTa:r.adEn}</div>
+    </div>
+    <button class="btn-sec" style="margin-top:4px" onclick="resetApp()">🔄 ${ta?'புதிய படம் எடுங்கள்':'Scan Another Leaf'}</button>
+  `;
+  show('results');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function setLoad(on,ta,en){
+  document.getElementById('loading').style.display=on?'block':'none';
+  if(on){document.getElementById('lta').textContent=ta;document.getElementById('len').textContent=en;}
+}
+function showErr(msg){
+  document.getElementById('results').innerHTML=
+    `<div class="res-card" style="background:#ffebee;border:1.5px solid #ef9a9a"><div class="res-lbl">⚠️ Error</div><div class="res-txt">${msg}</div></div>
+     <button class="btn-sec" style="margin-top:8px" onclick="resetApp()">🔄 Try Again</button>`;
+  show('results');
+}
+function show(id){document.getElementById(id).style.display='block';}
+function hide(id){document.getElementById(id).style.display='none';}
+function resetApp(){
+  b64=null;mime=null;detectedCrop='';confirmedCrop='';resultData={};
+  document.getElementById('prev-img').src='';
+  show('upload-ph');hide('prev-wrap');
+  document.getElementById('btn-analyse').style.display='none';
+  hide('loading');hide('confirm-box');hide('lang-toggle');hide('results');
+  document.getElementById('results').innerHTML='';
+  document.getElementById('file-input').value='';
+  document.getElementById('crop-select').style.display='none';
+  document.getElementById('btn-confirm-crop').style.display='none';
+  document.getElementById('crop-select').value='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").then(()=>console.log("SW ready")).catch(e=>console.log("SW:",e));}</script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js")
+      .then(()=>console.log("Vayal Maruthavar SW ready"))
+      .catch(e=>console.log("SW error:",e));
+  });
+}
+</script>
+</body>
+</html>
